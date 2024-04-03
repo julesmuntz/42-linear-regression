@@ -1,5 +1,6 @@
 import os
 import pickle
+import numpy as np
 
 
 def estimatePrice(mileage):
@@ -19,3 +20,8 @@ def getTheta():
 def setTheta(t0, t1):
     with open("theta", "wb") as f:
         pickle.dump([t0, t1], f)
+
+
+def meanSquaredError(y, y_hat):
+    res = np.mean((y - y_hat) ** 2)
+    return res
