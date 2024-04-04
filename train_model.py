@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from tools import setTheta, estimatePrice, meanSquaredError
+from tools import setTheta, meanSquaredError
 import numpy as np
 import os
 
@@ -14,17 +14,18 @@ def main():
         os.remove("theta")
     x = (x - min(x)) / (max(x) - min(x))
     y = (y - min(y)) / (max(y) - min(y))
-    learning_rate = 0.0005
     m = len(x)
     loss: list = np.array([])
     y_hat: list = np.array([])
-    for _ in range(1500):
-        y_hat = np.array([])
-        for i in x:
-            y_hat = np.append(y_hat, [t0 + (t1 * i)])
+    initial_learning_rate = 0.1
+    decay_rate = 0.1
+    step_size = 1000
+    for i in range(100000):
+        learning_rate = initial_learning_rate * (1 / (1 + decay_rate * (i // step_size)))
+        y_hat = t0 + t1 * x
         loss = np.append(loss, [meanSquaredError(y, y_hat)])
-        formula0 = 1 / m * sum((estimatePrice(x[i]) - y[i]) for i in range(m))
-        formula1 = (1 / m * sum((estimatePrice(x[i]) - y[i]) * x[i] for i in range(m)))
+        formula0 = 1 / m * sum(y_hat - y)
+        formula1 = 1 / m * sum((y_hat - y) * x)
         t0 -= learning_rate * formula0
         t1 -= learning_rate * formula1
     print(loss)
