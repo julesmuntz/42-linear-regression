@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from tools import setTheta
+from tools import setTheta, createAnimation
 import os
 from LinearRegression import LinearRegression
 
@@ -16,14 +16,15 @@ def main():
     model.fit(x, y)
     setTheta(model.t0, model.t1)
 
+    ani = createAnimation(x, model)
     plt.title("Price of a car for a given mileage (prediction)")
     plt.scatter(x, y, c="b")
-    plt.plot(x, model.predict(x), c="r")
     plt.xlabel("Mileage")
     plt.ylabel("Price")
+    ani.save("animation.gif")
     plt.show()
 
-    plt.title("Loss")
+    plt.title("Algorithm precision")
     plt.plot(model.loss, c="r")
     plt.xlabel("Iterations")
     plt.ylabel("Loss")
