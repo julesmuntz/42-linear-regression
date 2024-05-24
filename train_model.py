@@ -6,7 +6,14 @@ from LinearRegression import LinearRegression
 
 
 def main():
-    data = pd.read_csv("data.csv")
+    try:
+        data = pd.read_csv("data.csv")
+    except FileNotFoundError:
+        print("File not found")
+        return
+    except Exception as e:
+        print(f"An error occured: {e}")
+        return
     x = data["km"].to_numpy().reshape(-1, 1)
     y = data["price"].to_numpy().reshape(-1, 1)
     if os.path.exists("theta"):
