@@ -4,7 +4,6 @@ import mplcursors
 from tools import setTheta
 import os
 from LinearRegression import LinearRegression
-import numpy as np
 
 
 def main():
@@ -28,21 +27,18 @@ def main():
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
 
     ax1.set_title("Price of a car for a given mileage (prediction)")
-    scatter = ax1.scatter(x, y, c="b")
-    ax1.set_xlabel("Mileage")
-    ax1.set_ylabel("Price")
-    x_line = np.linspace(x.min(), x.max())
-    y_line = model.predict(x_line)
-    ax1.plot(x_line, y_line, c="r")
-    cursor = mplcursors.cursor(scatter)
+    cursor = mplcursors.cursor(ax1.scatter(x, y, c="b"))
     cursor.connect(
         "add",
         lambda sel: sel.annotation.set_text(
-            "Mileage: {}\nPrice: {}\nPredicted Price: {}".format(
-                sel.target[0], sel.target[1], float(model.predict(sel.target[0]))
+            "Mileage: {}\nPrice: {}\nPredicted Price: {:.2f}".format(
+                sel.target[0], sel.target[1], float(model.predict(sel.target[0].reshape(1, -1))[0, 0])
             )
         ),
     )
+    ax1.plot(x, model.predict(x), c="r")
+    ax1.set_xlabel("Mileage")
+    ax1.set_ylabel("Price")
 
     ax2.set_title("Algorithm precision")
     ax2.plot(model.loss, c="r")
