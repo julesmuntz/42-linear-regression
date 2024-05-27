@@ -33,7 +33,9 @@ class LinearRegression:
             formula1 = 1 / m * sum((y_hat - self.y) * self.x)
             self.t0 -= learning_rate * formula0
             self.t1 -= learning_rate * formula1
+        self.t1 = self.t1 * (self.y_range / self.x_range)
+        self.t0 = self.y_min + self.y_range * self.t0 - self.t1 * self.x_min
         return self
 
     def predict(self, x):
-        return self.y_min + self.y_range * (self.t0 + self.t1 * ((x - self.x_min) / self.x_range))
+        return self.t0 + self.t1 * x
